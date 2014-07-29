@@ -11,6 +11,7 @@ void init_tree(){
   rb_define_method(cTree, "initialize", initialize, 1);
   rb_define_method(cTree, "insert_path", insert_path, 1);
   rb_define_method(cTree, "compile", compile, 0);
+  rb_define_method(cTree, "match", match, 1);
   rb_define_method(cTree, "dump", dump, 1);
 }
 
