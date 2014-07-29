@@ -8,6 +8,6 @@ static VALUE initialize(VALUE self, VALUE size);
 static VALUE insert_path(VALUE self, VALUE path);
 static VALUE compile(VALUE self);
 static VALUE match(VALUE self, VALUE path);
-static VALUE dump(VALUE self, VALUE number);
+static VALUE dump(VALUE self, VALUE level);
 
 static void release(node *n);

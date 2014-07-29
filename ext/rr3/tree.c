@@ -46,10 +46,10 @@ static VALUE match(VALUE self, VALUE path){
   return matched_node ? Qtrue : Qfalse; // TODO: support data passing
 }
 
-static VALUE dump(VALUE self, VALUE number){
+static VALUE dump(VALUE self, VALUE level){
   VALUE obj = rb_ivar_get(self, rb_intern("node"));
   node *n; Data_Get_Struct(obj, node, n);
-  r3_tree_dump(n, FIX2INT(number));
+  r3_tree_dump(n, FIX2INT(level));
   return Qnil;
 }
 
