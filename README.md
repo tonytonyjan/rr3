@@ -2,7 +2,7 @@
 
 ## Dependency
 
-### OSX
+### OS X
 
     brew install r3
 
