@@ -23,7 +23,7 @@ static VALUE initialize(VALUE self, VALUE size){
 static VALUE insert_path(VALUE self, VALUE path){
   VALUE obj = rb_ivar_get(self, rb_intern("node"));
   node *n; Data_Get_Struct(obj, node, n);
-  r3_tree_insert_pathl(n, RSTRING_PTR(path), RSTRING_LEN(path), NULL);
+  r3_tree_insert_pathl(n, RSTRING_PTR(path), RSTRING_LEN(path), NULL); // TODO: support routedata
   return Qnil;
 }
 
@@ -36,6 +36,13 @@ static VALUE compile(VALUE self){
     free(errstr);
   }
   return Qnil;
+}
+
+static VALUE match(VALUE self, VALUE path){
+  VALUE obj = rb_ivar_get(self, rb_intern("node"));
+  node *n; Data_Get_Struct(obj, node, n);
+  node *matched_node = r3_tree_matchl(n, RSTRING_PTR(path), RSTRING_LEN(path), NULL); // TODO: support entry
+  return matched_node ? Qtrue : Qfalse; // TODO: support data passing
 }
 
 static VALUE dump(VALUE self, VALUE number){
