@@ -1,10 +1,18 @@
 # Rr3
 
+## Dependency
+
+### OSX
+
+    brew install r3
+
+### Ubuntu PPA
+
+The PPA for libr3 can be found in https://launchpad.net/~r3-team/+archive/libr3-daily
+
 ## Installation
 
-```
-$ gem install rr3
-```
+    $ gem install rr3
 
 ## Usage
 
