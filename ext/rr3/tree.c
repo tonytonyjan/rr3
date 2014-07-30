@@ -45,7 +45,7 @@ static VALUE compile(VALUE self){
 
 static VALUE match(VALUE self, VALUE path){
   node *matched_node = r3_tree_matchl(root(self), RSTRING_PTR(path), RSTRING_LEN(path), NULL); // TODO: support entry
-  return matched_node ? *((VALUE*) matched_node->data) : Qnil;
+  return matched_node ? *((VALUE*) matched_node->data) : Qfalse;
 }
 
 static VALUE dump(VALUE self, VALUE level){
