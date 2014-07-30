@@ -13,17 +13,17 @@ describe Rr3 do
   end
 
   it 'matches' do
-    expect(@tree.match("/bar")).to be_nil
-    expect(@tree.match("/asdf")).to be_nil
+    expect(@tree.match("/bar")).to be nil
+    expect(@tree.match("/zoo")).to be 9527
+    expect(@tree.match("/foo/bar")).to be 9527
+    expect(@tree.match("/post/1234")).to be 9527
+    expect(@tree.match("/user/1234")).to be 9527
+    expect(@tree.match("/user/xxx")).to be false
+    expect(@tree.match("/asd")).to be false
   end
 
   it 'dumps' do
-    @tree.dump(0)
-  end
-
-  it 'should pass any data' do
-    expect(@tree.match("/foo/bar")).to eql 9527
-    expect(@tree.match("/post/123")).to eql 9527
+    expect{ @tree.dump(0) }.not_to raise_error
   end
 
   it 'should returns root node' do
