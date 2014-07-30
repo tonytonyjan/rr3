@@ -1,5 +1,8 @@
+#ifndef RR3_TREE
+#define RR3_TREE
+
 #include <r3/r3.h>
-#include "ruby.h"
+#include <ruby.h>
 
 void init_tree();
 
@@ -14,3 +17,5 @@ static VALUE dump(VALUE self, VALUE level);
 // private functions
 static void release(node *n);
 inline static node* root(VALUE self);
+
+#endif

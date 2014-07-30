@@ -1,3 +1,4 @@
+#include <ruby.h>
 #include "node.h"
 #include "tree.h"
 
