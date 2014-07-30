@@ -2,14 +2,14 @@
 #include <r3/r3.h>
 #include "tree.h"
 
-VALUE cRr3;
+extern VALUE cRr3, cNode;
 VALUE cTree;
 
 void init_tree(){
-  cRr3 = rb_const_get(rb_cObject, rb_intern("Rr3"));
   cTree = rb_define_class_under(cRr3, "Tree", rb_cObject);
+  rb_define_attr(cTree, "root", 1, 0);
   rb_define_method(cTree, "initialize", initialize, 1);
-  rb_define_method(cTree, "insert_path", insert_path, 1);
+  rb_define_method(cTree, "insert_path", insert_path, -1);
   rb_define_method(cTree, "compile!", compile, 0);
   rb_define_method(cTree, "match", match, 1);
   rb_define_method(cTree, "dump", dump, 1);
@@ -17,22 +17,21 @@ void init_tree(){
 
 static VALUE initialize(VALUE self, VALUE size){
   node *n = r3_tree_create(FIX2INT(size));
-  rb_ivar_set(self, rb_intern("node"), Data_Wrap_Struct(cTree, NULL, release, n));
+  rb_ivar_set(self, rb_intern("@root"), Data_Wrap_Struct(cNode, NULL, release, n));
   return self;
 }
 
-static VALUE insert_path(VALUE self, VALUE path){
-  VALUE obj = rb_ivar_get(self, rb_intern("node"));
-  node *n; Data_Get_Struct(obj, node, n);
-  r3_tree_insert_pathl(n, RSTRING_PTR(path), RSTRING_LEN(path), NULL); // TODO: support routedata
+static VALUE insert_path(int argc, VALUE *argv, VALUE self){
+  VALUE path, *data;
+  Data_Make_Struct(rb_cObject, VALUE, NULL, -1, data);
+  rb_scan_args(argc, argv, "11", &path, data);
+  r3_tree_insert_pathl(root(self), RSTRING_PTR(path), RSTRING_LEN(path), data);
   return Qnil;
 }
 
 static VALUE compile(VALUE self){
-  VALUE obj = rb_ivar_get(self, rb_intern("node"));
-  node *n; Data_Get_Struct(obj, node, n);
   char *errstr = NULL;
-  if(r3_tree_compile(n, &errstr) != 0){
+  if(r3_tree_compile(root(self), &errstr) != 0){
     rb_raise(rb_eRuntimeError, "%s", errstr);
     free(errstr);
   }
@@ -40,19 +39,21 @@ static VALUE compile(VALUE self){
 }
 
 static VALUE match(VALUE self, VALUE path){
-  VALUE obj = rb_ivar_get(self, rb_intern("node"));
-  node *n; Data_Get_Struct(obj, node, n);
-  node *matched_node = r3_tree_matchl(n, RSTRING_PTR(path), RSTRING_LEN(path), NULL); // TODO: support entry
-  return matched_node ? Qtrue : Qfalse; // TODO: support data passing
+  node *matched_node = r3_tree_matchl(root(self), RSTRING_PTR(path), RSTRING_LEN(path), NULL); // TODO: support entry
+  return matched_node ? *((VALUE*) matched_node->data) : Qnil;
 }
 
 static VALUE dump(VALUE self, VALUE level){
-  VALUE obj = rb_ivar_get(self, rb_intern("node"));
-  node *n; Data_Get_Struct(obj, node, n);
-  r3_tree_dump(n, FIX2INT(level));
+  r3_tree_dump(root(self), FIX2INT(level));
   return Qnil;
 }
 
 static void release(node *n){
   r3_tree_free(n);
+}
+
+inline static node* root(VALUE self){
+  VALUE _root = rb_ivar_get(self, rb_intern("@root"));
+  node *root; Data_Get_Struct(_root, node, root);
+  return root;
 }
