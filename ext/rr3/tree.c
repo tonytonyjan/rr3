@@ -25,7 +25,12 @@ static VALUE insert_path(int argc, VALUE *argv, VALUE self){
   VALUE path, *data;
   Data_Make_Struct(rb_cObject, VALUE, NULL, -1, data);
   rb_scan_args(argc, argv, "11", &path, data);
-  r3_tree_insert_pathl(root(self), RSTRING_PTR(path), RSTRING_LEN(path), data);
+  char *errstr = NULL;
+  node *ret = r3_tree_insert_pathl_ex(root(self), RSTRING_PTR(path), RSTRING_LEN(path), NULL, data, &errstr);
+  if(ret == NULL){
+    rb_raise(rb_eRuntimeError, "%s", errstr);
+    free(errstr);
+  }
   return Qnil;
 }
 
