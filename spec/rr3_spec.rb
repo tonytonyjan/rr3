@@ -26,8 +26,4 @@ describe Rr3 do
   it 'dumps' do
     expect{ @tree.dump(0) }.not_to raise_error
   end
-
-  it 'should returns root node' do
-    expect(@tree.root).to be_a Rr3::Node
-  end
 end
