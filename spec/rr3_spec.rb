@@ -1,4 +1,3 @@
-$: << File.expand_path('../../ext', __FILE__)
 require 'spec_helper'
 
 describe Rr3 do
