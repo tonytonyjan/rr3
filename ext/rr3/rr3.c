@@ -1,11 +1,9 @@
-#include <ruby.h>
-#include "node.h"
+#include "rr3.h"
 #include "tree.h"
 
-VALUE cRr3;
+VALUE rb_mRr3;
 
-void Init_rr3(){
-  cRr3 = rb_const_get(rb_cObject, rb_intern("Rr3"));
-  init_node();
+void Init_rr3(void){
+  rb_mRr3 = rb_define_module("Rr3");
   init_tree();
 }
